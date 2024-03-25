@@ -1,23 +1,23 @@
-package com.msb.apipaggenger;
+package com.msb.serviceverificationcode;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
- * ClassName: ApiPassengerApplication
- * Package: com.msb.apipaggenger
+ * ClassName: ServiceVerificationCodeApplication
+ * Package: com.msb.serviceverificationcode
  * Description:
  *
  * @Author Emoaya
- * @Create 2024/3/24 15:12
+ * @Create 2024/3/25 15:04
  * @Version 1.0
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-public class ApiPassengerApplication {
+public class ServiceVerificationCodeApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ApiPassengerApplication.class, args);
+        SpringApplication.run(ServiceVerificationCodeApplication.class, args);
     }
+
 }

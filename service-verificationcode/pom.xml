@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>api-passenger</artifactId>
+    <artifactId>service-verificationcode</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -29,5 +29,7 @@
             <version>2021.0.5.0</version>
         </dependency>
     </dependencies>
+
+
 
 </project>

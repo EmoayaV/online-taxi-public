@@ -1,5 +1,9 @@
 package com.msb.apipaggenger.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * ClassName: VerificationCodeDTO
  * Package: com.msb.apipaggenger.request
@@ -13,15 +17,9 @@ package com.msb.apipaggenger.request;
  * @Create 2024/3/24 15:41
  * @Version 1.0
  */
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class VerificationCodeDTO {
     private String passengerPhone;
-
-    public void setPassengerPhone(String passengerPhone) {
-        this.passengerPhone = passengerPhone;
-    }
-
-    public String getPassengerPhone() {
-        return passengerPhone;
-    }
 }
