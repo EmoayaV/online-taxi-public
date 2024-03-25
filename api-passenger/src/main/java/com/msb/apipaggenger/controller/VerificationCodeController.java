@@ -25,10 +25,10 @@ public class VerificationCodeController {
     @RequestMapping("/verification-code")
     @ResponseBody
     public String verificationCode(@RequestBody VerificationCodeDTO verificationCodeDTO) {
-
+        //接收参数
         System.out.println("接收到的手机号为" + verificationCodeDTO.getPassengerPhone());
 
-        //调用service层方法生成验证码并且返回响应成功的json格式的字符串
+        //返回参数：调用service层方法生成验证码并且返回响应成功的json格式的字符串
         return verificationCodeService.generatorCode(verificationCodeDTO.getPassengerPhone());
     }
 
