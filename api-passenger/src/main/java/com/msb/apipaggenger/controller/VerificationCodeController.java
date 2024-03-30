@@ -3,6 +3,7 @@ package com.msb.apipaggenger.controller;
 import com.msb.apipaggenger.remote.ServiceVerificationCodeClient;
 import com.msb.apipaggenger.request.VerificationCodeDTO;
 import com.msb.apipaggenger.service.VerificationCodeService;
+import com.msb.internalcommon.dto.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ public class VerificationCodeController {
 
     @RequestMapping("/verification-code")
     @ResponseBody
-    public String verificationCode(@RequestBody VerificationCodeDTO verificationCodeDTO) {
+    public ResponseResult verificationCode(@RequestBody VerificationCodeDTO verificationCodeDTO) {
         //接收参数
         System.out.println("接收到的手机号为" + verificationCodeDTO.getPassengerPhone());
 

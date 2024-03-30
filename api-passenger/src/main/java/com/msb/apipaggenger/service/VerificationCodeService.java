@@ -5,7 +5,10 @@ import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.internalcommon.response.NumberCodeResponse;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * ClassName: VerificationCodeService
@@ -28,7 +31,14 @@ public class VerificationCodeService {
     @Autowired
     private ServiceVerificationCodeClient serviceVerificationCodeClient;
 
-    public String generatorCode(String passengerPhone) {
+    //验证码前缀
+    private String verificationCodePrefix = "passenger-verification-code-";
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+
+    public ResponseResult generatorCode(String passengerPhone) {
         // 1.调用验证码服务，获取验证码
         System.out.println("调用验证码服务，获取验证码");
         ResponseResult<NumberCodeResponse> numberCodeResponse = serviceVerificationCodeClient.getNumberCode(6);
@@ -36,15 +46,13 @@ public class VerificationCodeService {
         System.out.println("调用serviceverification生成的验证码为：" + numberCode);
 
 
-        // 2.存入redis
+        // 2.存入redis,需要key，value，过期时间
         System.out.println("存入redis");
+        String key = verificationCodePrefix + passengerPhone;
+        stringRedisTemplate.opsForValue().set(key, numberCode + "", 2, TimeUnit.MINUTES);
 
-        // 3.返回对应的json格式的字符串
-        System.out.println("返回对应的json格式的字符串");
-        JSONObject result = new JSONObject();
-        result.put("code", 1);
-        result.put("message", "success");
-        return result.toString();
+        //通过短信服务，将验证码发送到手机上，
+        return ResponseResult.success();
     }
 
 }
