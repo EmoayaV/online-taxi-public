@@ -29,21 +29,13 @@ public class NumberCodeController {
     public ResponseResult numberCode(@PathVariable("size") int size) {
         //接收参数
         System.out.println("size:" + size);
-        //获取一个验证码
-//        numberCodeService.getRandom(size);
-        //返回参数
-//        JSONObject result = new JSONObject();
-//        JSONObject data = new JSONObject();
-//        result.put("code", 1);
-//        result.put("message", "success");
-//        data.put("numberCode", numberCodeService.getRandom(size));
-//        result.put("data", data);
-
 
         //用NumberCodeResponse对象接受生成的验证码
         NumberCodeResponse response = new NumberCodeResponse();
         response.setNumberCode(numberCodeService.getRandom(size));
-        //返回参数，会自动把ResponseResult对象变为json格式字符串
+        System.out.println("serviceverification生成的验证码为：" + response.getNumberCode());
+
+        //返回参数，会自动把ResponseResult对象转为json格式的字符串
         return ResponseResult.success(response);
     }
 }

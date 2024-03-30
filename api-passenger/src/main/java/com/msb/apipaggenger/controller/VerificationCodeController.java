@@ -1,5 +1,6 @@
 package com.msb.apipaggenger.controller;
 
+import com.msb.apipaggenger.remote.ServiceVerificationCodeClient;
 import com.msb.apipaggenger.request.VerificationCodeDTO;
 import com.msb.apipaggenger.service.VerificationCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
