@@ -1,4 +1,4 @@
-package com.msb.apipaggenger.util;
+package com.msb.internalcommon.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
@@ -52,8 +52,8 @@ public class JwtUtils {
                     builder.withClaim(k, v);
                 }
         );
-        //整合过期时间
-        builder.withExpiresAt(date);
+        //整合过期时间，注释----》由redis控制
+//        builder.withExpiresAt(date);
 
         //生成token
         String sign = builder.sign(Algorithm.HMAC256(SIGN));
