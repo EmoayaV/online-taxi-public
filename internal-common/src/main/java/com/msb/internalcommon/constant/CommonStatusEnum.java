@@ -16,9 +16,11 @@ import lombok.Getter;
 
 
 //枚举类不能有set方法，所以不能用@Data注解，使用@Getter注解只生成get方法
+//验证码错误提示1000-1099
 @AllArgsConstructor
 public enum CommonStatusEnum {
 
+    VERIFICATION_CODE_ERROR(1099,"验证码不正确"),
     SUCCESS(1, "success"),
     FAIL(0, "fail");
 

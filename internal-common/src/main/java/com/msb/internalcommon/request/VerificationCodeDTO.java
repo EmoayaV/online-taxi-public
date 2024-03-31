@@ -1,4 +1,4 @@
-package com.msb.apipaggenger.request;
+package com.msb.internalcommon.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,4 +22,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class VerificationCodeDTO {
     private String passengerPhone;
+    private String verificationCode;
 }
