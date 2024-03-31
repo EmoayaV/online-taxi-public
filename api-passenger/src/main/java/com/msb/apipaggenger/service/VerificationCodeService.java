@@ -102,10 +102,15 @@ public class VerificationCodeService {
         //颁发令牌
         System.out.println("颁发令牌");
 
+
+
         //响应信息
         TokenResponse tokenResponse = new TokenResponse();
         tokenResponse.setToken("token");
         return ResponseResult.success(tokenResponse);
+
+
+
     }
 
 
