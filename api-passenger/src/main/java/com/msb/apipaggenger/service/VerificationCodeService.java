@@ -1,8 +1,10 @@
 package com.msb.apipaggenger.service;
 
+import com.msb.apipaggenger.remote.ServicePassengerUserClient;
 import com.msb.apipaggenger.remote.ServiceVerificationCodeClient;
 import com.msb.internalcommon.constant.CommonStatusEnum;
 import com.msb.internalcommon.dto.ResponseResult;
+import com.msb.internalcommon.request.VerificationCodeDTO;
 import com.msb.internalcommon.response.NumberCodeResponse;
 import com.msb.internalcommon.response.TokenResponse;
 import net.sf.json.JSONObject;
@@ -34,11 +36,15 @@ public class VerificationCodeService {
     @Autowired
     private ServiceVerificationCodeClient serviceVerificationCodeClient;
 
+    @Autowired
+    private ServicePassengerUserClient servicePassengerUserClient;
+
     //验证码前缀
     private String verificationCodePrefix = "passenger-verification-code-";
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
 
     /**
      * 生成验证码放入redis数据库，返回响应成功信息
@@ -88,6 +94,9 @@ public class VerificationCodeService {
 
         //判断原来是否有用户，做出相应的处理
         System.out.println("判断原来是否有用户，做出相应的处理");
+        VerificationCodeDTO verificationCodeDTO = new VerificationCodeDTO();
+        verificationCodeDTO.setPassengerPhone(passengerPhone);
+        servicePassengerUserClient.getLoginOrRegister(verificationCodeDTO);
 
 
         //颁发令牌

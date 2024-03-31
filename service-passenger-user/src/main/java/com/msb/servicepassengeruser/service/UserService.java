@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,14 +35,21 @@ public class UserService {
         Map<String, Object> map = new HashMap<>();
         map.put("passenger_phone", passengerPhone);
         List<PassengerUser> passengerUsers = passengerUserMapper.selectByMap(map);//相当于sql语句SELECT * FROM 表名 WHERE 列名1= ?
-        System.out.println("查询到的记录为:" + passengerUsers.get(0).getPassengerPhone());
-
 
         //判断用户信息是否存在
         System.out.println("判断用户信息是否存在");
-
-        //如果不存在，插入用户信息
-        System.out.println("判断用户信息是否存在");
+        //不存在就新建一条数据
+        if (passengerUsers.size() == 0) {
+            System.out.println("插入数据");
+            PassengerUser passengerUser = new PassengerUser();
+            passengerUser.setPassengerName("张三");
+            passengerUser.setPassengerGender((byte) 0);
+            passengerUser.setPassengerPhone("1234567890");
+            passengerUser.setState((byte) 0);
+            passengerUser.setGmtModified(LocalDateTime.now());
+            passengerUser.setGmtCreate(LocalDateTime.now());
+            passengerUserMapper.insert(passengerUser);
+        }
 
         return ResponseResult.success();
     }
