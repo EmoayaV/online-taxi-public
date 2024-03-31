@@ -2,7 +2,9 @@ package com.msb.apipaggenger.service;
 
 import com.msb.apipaggenger.remote.ServicePassengerUserClient;
 import com.msb.apipaggenger.remote.ServiceVerificationCodeClient;
+import com.msb.apipaggenger.util.JwtUtils;
 import com.msb.internalcommon.constant.CommonStatusEnum;
+import com.msb.internalcommon.constant.IdentityConstant;
 import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.internalcommon.request.VerificationCodeDTO;
 import com.msb.internalcommon.response.NumberCodeResponse;
@@ -92,21 +94,22 @@ public class VerificationCodeService {
         }
 
 
-        //判断原来是否有用户，做出相应的处理
+        //判断原来是否有用户，做出相应的处理,调用服务：根据手机号查询用户信息，原来在mysql数据库有数据就返回成功，如果没有就插入数据返回成功
         System.out.println("判断原来是否有用户，做出相应的处理");
         VerificationCodeDTO verificationCodeDTO = new VerificationCodeDTO();
         verificationCodeDTO.setPassengerPhone(passengerPhone);
         servicePassengerUserClient.getLoginOrRegister(verificationCodeDTO);
 
 
-        //颁发令牌
+        //颁发令牌，不应该将identity设置为字符串固定值，应该使用枚举类
         System.out.println("颁发令牌");
-
+        String token = JwtUtils.generatorToken(passengerPhone, IdentityConstant.PASSENGER_IDENTITY);
+        System.out.println("生成的token为" + token);
 
 
         //响应信息
         TokenResponse tokenResponse = new TokenResponse();
-        tokenResponse.setToken("token");
+        tokenResponse.setToken(token);
         return ResponseResult.success(tokenResponse);
 
 

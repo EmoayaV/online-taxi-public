@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.msb.internalcommon.dto.TokenResult;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,13 +26,19 @@ import static com.auth0.jwt.JWT.require;
 public class JwtUtils {
     //盐:乱写
     private static final String SIGN = "&yuigsg*&yas";
-    private static final String JWT_KEY = "passengerPhone";
+
+    //乘客或者司机的手机号
+    private static final String JWT_KEY_PHONE = "phone";
+
+    //乘客是1，司机是2
+    private static final String JWT_KEY_IDENTITY = "identity";
 
     //生成token
-    public static String generatorToken(String passengerPhone) {
+    public static String generatorToken(String passengerPhone, String identity) {
         //使用passengerPhone生成Token
         Map<String, String> map = new HashMap<>();
-        map.put(JWT_KEY, passengerPhone);
+        map.put(JWT_KEY_PHONE, passengerPhone);
+        map.put(JWT_KEY_IDENTITY, identity);
 
         //token过期时间1天
         Calendar calendar = Calendar.getInstance();
@@ -57,17 +64,21 @@ public class JwtUtils {
 
 
     //解析token
-    public static String parseToken(String token) {
+    public static TokenResult parseToken(String token) {
         DecodedJWT verify = JWT.require(Algorithm.HMAC256(SIGN)).build().verify(token);
-        Claim claim = verify.getClaim(JWT_KEY);
-        return claim.toString();
+        String phone = verify.getClaim(JWT_KEY_PHONE).toString();
+        String identity = verify.getClaim(JWT_KEY_IDENTITY).toString();
+        TokenResult tokenResult = new TokenResult();
+        tokenResult.setIdentity(identity);
+        tokenResult.setPhone(phone);
+        return tokenResult;
     }
 
 
     public static void main(String[] args) {
-        String token = generatorToken("18997925277");
+        String token = generatorToken("18997925277","1");
         System.out.println("生成的token" + token);
-        System.out.println("解析token后的值" + parseToken(token));
+        System.out.println("解析后的token" + parseToken(token));
     }
 
 }
