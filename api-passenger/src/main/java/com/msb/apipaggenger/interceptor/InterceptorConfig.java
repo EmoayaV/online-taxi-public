@@ -18,9 +18,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
+
+    @Bean
+    public JwtInterceptor jwtInterceptor(){
+        return new JwtInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new JwtInterceptor())
+        registry.addInterceptor(jwtInterceptor())
                 //需要拦截的路径，一般来说拦截所有的路径
                 .addPathPatterns("/**")
                 //不需要拦截的路径，这里设置不拦截的路径

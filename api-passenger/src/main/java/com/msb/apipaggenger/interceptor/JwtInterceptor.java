@@ -3,6 +3,7 @@ package com.msb.apipaggenger.interceptor;
 import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.msb.internalcommon.constant.TokenConstant;
 import com.msb.internalcommon.dto.TokenResult;
 import com.msb.internalcommon.util.JwtUtils;
 import com.msb.internalcommon.dto.ResponseResult;
@@ -30,6 +31,7 @@ import java.io.PrintWriter;
  */
 public class JwtInterceptor implements HandlerInterceptor {
 
+    @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
     //在请求到达我们定义的handler之前工作的
@@ -70,7 +72,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             //利用token中携带的phone和identity获取key
             String phone = tokenResult.getPhone();
             String identity = tokenResult.getIdentity();
-            String tokenKey = RedisPrefixUtils.generateTokenKey(phone, identity);
+            String tokenKey = RedisPrefixUtils.generateTokenKey(phone, identity, TokenConstant.ACCESS_TOKEN_TYPE);
             //从redis 中取出token
             String tokenRedis = stringRedisTemplate.opsForValue().get(tokenKey);
             //token过期
