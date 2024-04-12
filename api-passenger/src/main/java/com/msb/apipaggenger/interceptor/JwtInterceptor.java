@@ -48,11 +48,12 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         //解析+校验token，校验失败，则tokenResult = null
         tokenResult = JwtUtils.checkToken(token);
+        System.out.println( "tokenResult为:"+tokenResult);
 
 
         //从redis中取出token
         if(tokenResult == null){
-            resultString = "token invalid";
+            resultString = "access token invalid";
             result = false;
         }else{
             //利用token中携带的phone和identity获取key
@@ -63,7 +64,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             String tokenRedis = stringRedisTemplate.opsForValue().get(tokenKey);
             //token过期或者不等
             if((StringUtils.isBlank(tokenRedis)) || (!token.trim().equals(tokenRedis.trim()))){
-                resultString = "token invalid";
+                resultString = "access token invalid";
                 result = false;
             }
         }
