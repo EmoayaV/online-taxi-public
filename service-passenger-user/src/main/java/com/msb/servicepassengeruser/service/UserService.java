@@ -1,18 +1,14 @@
 package com.msb.servicepassengeruser.service;
 
 import com.msb.internalcommon.dto.ResponseResult;
-import com.msb.internalcommon.request.VerificationCodeDTO;
-import com.msb.servicepassengeruser.dto.PassengerUser;
 import com.msb.servicepassengeruser.mapper.PassengerUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * ClassName: UserService

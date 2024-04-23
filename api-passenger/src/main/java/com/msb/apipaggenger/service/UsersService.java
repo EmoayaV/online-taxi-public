@@ -1,0 +1,39 @@
+package com.msb.apipaggenger.service;
+
+import com.msb.internalcommon.dto.PassengerUser;
+import com.msb.internalcommon.dto.ResponseResult;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+/**
+ * ClassName: UsersService
+ * Package: com.msb.apipaggenger.service
+ * Description:
+ *
+ * @Author Emoaya
+ * @Create 2024/4/23 20:17
+ * @Version 1.0
+ */
+@Service
+@Slf4j
+public class UsersService {
+
+    public ResponseResult getUserByAccessToken(String accessToken){
+        //解析accesstoken拿到手机号
+        log.info("accessToken:"+accessToken);
+
+        //根据手机号查询用户信息
+
+        PassengerUser passengerUser = new PassengerUser();
+        passengerUser.setPassengerName("张三");
+        passengerUser.setProfilePhoto("头像");
+
+
+
+        //响应用户信息
+        return ResponseResult.success(passengerUser);
+    }
+
+
+
+}
