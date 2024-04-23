@@ -5,6 +5,7 @@ import com.msb.internalcommon.request.VerificationCodeDTO;
 import com.msb.servicepassengeruser.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,6 +34,14 @@ public class UserController {
 
         //返回参数
         return userService.loginOrRegister(passengerPhone);
+    }
+
+    @GetMapping("/user")
+    @ResponseBody
+    public ResponseResult getUser(@RequestBody VerificationCodeDTO verificationCodeDTO){
+        //接受数据
+        String passengerPhone = verificationCodeDTO.getPassengerPhone();
+        return userService.getUserByPhone(passengerPhone);
     }
 
 }

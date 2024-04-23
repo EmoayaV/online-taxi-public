@@ -1,7 +1,10 @@
 package com.msb.servicepassengeruser.service;
 
+import com.msb.internalcommon.constant.CommonStatusEnum;
+import com.msb.internalcommon.dto.PassengerUser;
 import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.servicepassengeruser.mapper.PassengerUserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,7 @@ import java.util.Map;
  * @Version 1.0
  */
 @Service
+@Slf4j
 public class UserService {
 
     @Autowired
@@ -31,6 +35,7 @@ public class UserService {
         Map<String, Object> map = new HashMap<>();
         map.put("passenger_phone", passengerPhone);
         List<PassengerUser> passengerUsers = passengerUserMapper.selectByMap(map);//相当于sql语句SELECT * FROM 表名 WHERE 列名1= ?
+        log.info(passengerUsers.toString());
 
         //判断用户信息是否存在
         System.out.println("判断用户信息是否存在");
@@ -49,4 +54,21 @@ public class UserService {
 
         return ResponseResult.success();
     }
+
+    public ResponseResult getUserByPhone(String passengerPhone) {
+        //根据手机号查询用户信息
+        System.out.println("根据手机号查询用户信息");
+        Map<String, Object> map = new HashMap<>();
+        map.put("passenger_phone", passengerPhone);
+        List<PassengerUser> passengerUsers = passengerUserMapper.selectByMap(map);//相当于sql语句SELECT * FROM 表名 WHERE 列名1= ?
+        log.info(passengerUsers.toString());
+
+        if (passengerUsers.size() == 0) {
+            return ResponseResult.fail(CommonStatusEnum.USER_NOT_EXISTS.getCode(), CommonStatusEnum.USER_NOT_EXISTS.getValue());
+        } else{
+            PassengerUser passengerUser = passengerUsers.get(0);
+            return ResponseResult.success(passengerUser);
+        }
+    }
+
 }

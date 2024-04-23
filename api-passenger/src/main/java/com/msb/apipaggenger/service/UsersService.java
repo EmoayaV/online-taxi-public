@@ -2,6 +2,8 @@ package com.msb.apipaggenger.service;
 
 import com.msb.internalcommon.dto.PassengerUser;
 import com.msb.internalcommon.dto.ResponseResult;
+import com.msb.internalcommon.dto.TokenResult;
+import com.msb.internalcommon.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +23,13 @@ public class UsersService {
     public ResponseResult getUserByAccessToken(String accessToken){
         //解析accesstoken拿到手机号
         log.info("accessToken:"+accessToken);
+        TokenResult tokenResult = JwtUtils.checkToken(accessToken);
+        String phone = tokenResult.getPhone();
+        log.info("手机号:"+phone);
 
         //根据手机号查询用户信息
+
+
 
         PassengerUser passengerUser = new PassengerUser();
         passengerUser.setPassengerName("张三");
