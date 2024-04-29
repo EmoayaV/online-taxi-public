@@ -117,8 +117,8 @@ public class VerificationCodeService {
 
         //将token存入redis,有效期30天
         System.out.println("将token存入redis");
-        stringRedisTemplate.opsForValue().set(accessTokenKey, accessToken, 1800, TimeUnit.SECONDS);
-        stringRedisTemplate.opsForValue().set(refreshTokenKey, refreshToken, 1900, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(accessTokenKey, accessToken, 30, TimeUnit.DAYS);
+        stringRedisTemplate.opsForValue().set(refreshTokenKey, refreshToken, 31, TimeUnit.DAYS);
 
         //响应信息
         TokenResponse tokenResponse = new TokenResponse();
