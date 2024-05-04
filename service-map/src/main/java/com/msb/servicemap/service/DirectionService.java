@@ -2,6 +2,8 @@ package com.msb.servicemap.service;
 
 import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.internalcommon.response.DirectionResponse;
+import com.msb.servicemap.remote.MapDirectionClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,12 +19,16 @@ import org.springframework.stereotype.Service;
 
 public class DirectionService {
 
+    @Autowired
+    private MapDirectionClient mapDirectionClient;
+
     public ResponseResult driving(String depLongitude, String depLatitude, String destLongitude, String destLatitude){
 
-        DirectionResponse directionResponse = new DirectionResponse();
-        directionResponse.setDistance(123);
-        directionResponse.setDuration(11);
-        return ResponseResult.success(directionResponse);
+        //调用地图接口
+        DirectionResponse direction = mapDirectionClient.direction(depLongitude, depLatitude, destLongitude, destLatitude);
+
+
+        return ResponseResult.success(direction);
     }
 
 }
