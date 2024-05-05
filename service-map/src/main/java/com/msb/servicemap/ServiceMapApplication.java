@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
  * @Version 1.0
  */
 @SpringBootApplication
+@EnableDiscoveryClient
 public class ServiceMapApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServiceMapApplication.class, args);
