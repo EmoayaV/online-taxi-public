@@ -92,7 +92,7 @@ public class DicDistrictService {
             }
         }
 
-        //插入数据库
+
 
 
         return ResponseResult.success();
@@ -106,8 +106,9 @@ public class DicDistrictService {
         district.setAddressName(addressName);
         int levelInt = generateLevel(level);
         district.setLevel(levelInt);
-
         district.setParentAddressCode(parentAddressCode);
+
+        //插入数据库
         dicDistrictMapper.insert(district);
     }
 
