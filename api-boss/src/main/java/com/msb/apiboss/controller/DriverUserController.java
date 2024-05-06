@@ -1,37 +1,33 @@
-package com.msb.servicedriveruser.controller;
+package com.msb.apiboss.controller;
 
+import com.msb.apiboss.service.DriverUserService;
 import com.msb.internalcommon.dto.DriverUser;
 import com.msb.internalcommon.dto.ResponseResult;
-import com.msb.servicedriveruser.service.DriverUserService;
-import lombok.extern.slf4j.Slf4j;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * ClassName: UserController
- * Package: com.msb.servicedriveruser.controller
+ * ClassName: DriverUserController
+ * Package: com.msb.apiboss.controller
  * Description:
  *
  * @Author Emoaya
- * @Create 2024/5/6 15:10
+ * @Create 2024/5/6 16:22
  * @Version 1.0
  */
+
 @RestController
-@Slf4j
-public class UserController {
+public class DriverUserController {
 
     @Autowired
     private DriverUserService driverUserService;
 
-    @PostMapping ("/user")
-    public ResponseResult addUser(@RequestBody DriverUser driverUser){
-        log.info(JSONObject.fromObject(driverUser).toString());
+    @PostMapping("/driver-user")
+    public ResponseResult addDriverUser(@RequestBody DriverUser driverUser){
         return driverUserService.addDriverUser(driverUser);
     }
-
 
 }
