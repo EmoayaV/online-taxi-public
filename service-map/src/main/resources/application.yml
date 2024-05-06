@@ -1,6 +1,11 @@
 server:
   port: 8085
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/service-map?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
   cloud:
     nacos:
       discovery:
