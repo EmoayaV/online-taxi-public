@@ -22,8 +22,12 @@ public class DriverUserService {
     @Autowired
     private ServiceDriverUserClient serviceDriverUserClient;
 
-    public ResponseResult addDriverUser(DriverUser driverUser){
+    public ResponseResult addDriverUser(DriverUser driverUser) {
         return serviceDriverUserClient.addDriverUser(driverUser);
+    }
+
+    public ResponseResult updateDriverUser(DriverUser driverUser) {
+        return serviceDriverUserClient.updateDriverUser(driverUser);
     }
 
 
