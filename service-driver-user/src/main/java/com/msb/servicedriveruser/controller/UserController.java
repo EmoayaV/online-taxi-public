@@ -1,5 +1,6 @@
 package com.msb.servicedriveruser.controller;
 
+import com.msb.internalcommon.constant.DriverCarConstants;
 import com.msb.internalcommon.dto.DriverUser;
 import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.internalcommon.response.DriverUserExistsResponse;
@@ -41,24 +42,21 @@ public class UserController {
 
     //根据条件查询司机
     @GetMapping("/check-driver/{driverPhone}")
-    public ResponseResult getUser(@PathVariable("driverPhone") String driverPhone){
+    public ResponseResult<DriverUserExistsResponse> getUser(@PathVariable("driverPhone") String driverPhone){
 
         ResponseResult<DriverUser> driverUserByPhone = driverUserService.getDriverUserByPhone(driverPhone);
         DriverUser driverUserDB = driverUserByPhone.getData();
 
         DriverUserExistsResponse driverUserExistsResponse = new DriverUserExistsResponse();
-        int isExists = 1;
+        int isExists = DriverCarConstants.DRIVER_EXISTS;
         if(driverUserDB== null){
-            isExists = 0;
+            isExists = DriverCarConstants.DRIVER_NOT_EXISTS;
             driverUserExistsResponse.setIsExists(isExists);
             driverUserExistsResponse.setDriverPhone(driverPhone);
         }else{
             driverUserExistsResponse.setIsExists(isExists);
             driverUserExistsResponse.setDriverPhone(driverUserDB.getDriverPhone());
         }
-
-
-
 
         return ResponseResult.success(driverUserExistsResponse);
     }
