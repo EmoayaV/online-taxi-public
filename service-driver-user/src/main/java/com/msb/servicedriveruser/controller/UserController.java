@@ -2,6 +2,7 @@ package com.msb.servicedriveruser.controller;
 
 import com.msb.internalcommon.dto.DriverUser;
 import com.msb.internalcommon.dto.ResponseResult;
+import com.msb.internalcommon.response.DriverUserExistsResponse;
 import com.msb.servicedriveruser.service.DriverUserService;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
@@ -24,18 +25,42 @@ public class UserController {
     @Autowired
     private DriverUserService driverUserService;
 
+    //新增司机
     @PostMapping ("/user")
     public ResponseResult addUser(@RequestBody DriverUser driverUser){
         log.info(JSONObject.fromObject(driverUser).toString());
         return driverUserService.addDriverUser(driverUser);
     }
 
-
+    //修改司机
     @PutMapping("/user")
     public ResponseResult updateUser(@RequestBody DriverUser driverUser){
         log.info(JSONObject.fromObject(driverUser).toString());
         return driverUserService.updateDriverUser(driverUser);
     }
 
+    //根据条件查询司机
+    @GetMapping("/check-driver/{driverPhone}")
+    public ResponseResult getUser(@PathVariable("driverPhone") String driverPhone){
+
+        ResponseResult<DriverUser> driverUserByPhone = driverUserService.getDriverUserByPhone(driverPhone);
+        DriverUser driverUserDB = driverUserByPhone.getData();
+
+        DriverUserExistsResponse driverUserExistsResponse = new DriverUserExistsResponse();
+        int isExists = 1;
+        if(driverUserDB== null){
+            isExists = 0;
+            driverUserExistsResponse.setIsExists(isExists);
+            driverUserExistsResponse.setDriverPhone(driverPhone);
+        }else{
+            driverUserExistsResponse.setIsExists(isExists);
+            driverUserExistsResponse.setDriverPhone(driverUserDB.getDriverPhone());
+        }
+
+
+
+
+        return ResponseResult.success(driverUserExistsResponse);
+    }
 
 }

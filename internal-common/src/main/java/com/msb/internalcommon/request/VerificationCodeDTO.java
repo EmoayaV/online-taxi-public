@@ -23,4 +23,5 @@ import lombok.NoArgsConstructor;
 public class VerificationCodeDTO {
     private String passengerPhone;
     private String verificationCode;
+    private String driverPhone;
 }
