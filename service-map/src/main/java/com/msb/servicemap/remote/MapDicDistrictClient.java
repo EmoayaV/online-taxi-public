@@ -30,6 +30,7 @@ public class MapDicDistrictClient {
     public String dicDistrict(String keywords) {
 
         //拼装请求url
+        //https://restapi.amap.com/v3/config/district?keywords=中国&subdistrict=3&key=<用户的key>
         StringBuilder url = new StringBuilder();
         url.append(AmapConfigConstants.DISTRICT_URL);
         url.append("?");

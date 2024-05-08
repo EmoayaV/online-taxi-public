@@ -12,26 +12,28 @@ package com.msb.internalcommon.util;
 public class RedisPrefixUtils {
 
     //验证码前缀
-    private static String verificationCodePrefix = "passenger-verification-code-";
+    private static String verificationCodePrefix = "verification-code-";
     private static String tokenPrefix = "token-";
 
     /**
      * 根据手机号生成key
      *
-     * @param passengerPhone 手机号
+     * @param phone    手机号
+     * @param identity 手机号
      * @return key
      */
-    public static String generateKeyByPhone(String passengerPhone) {
-        return verificationCodePrefix + passengerPhone;
+    public static String generateKeyByPhone(String phone, String identity) {
+        return verificationCodePrefix + identity + "-" + phone;
     }
 
     /**
      * 根据手机号和身份表示生成token的key
+     *
      * @param phone
      * @param identity
      * @return
      */
     public static String generateTokenKey(String phone, String identity, String tokenType) {
-        return tokenPrefix + phone + "-" + identity+"-" + tokenType;
+        return tokenPrefix + phone + "-" + identity + "-" + tokenType;
     }
 }

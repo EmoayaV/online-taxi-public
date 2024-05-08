@@ -63,7 +63,7 @@ public class VerificationCodeService {
 
         // 2.存入redis,需要key，value，过期时间
         System.out.println("将验证码存入redis");
-        String key = RedisPrefixUtils.generateKeyByPhone(passengerPhone);
+        String key = RedisPrefixUtils.generateKeyByPhone(passengerPhone, IdentityConstant.PASSENGER_IDENTITY);
         stringRedisTemplate.opsForValue().set(key, numberCode + "", 2, TimeUnit.MINUTES);
 
         //通过短信服务，将验证码发送到手机上，暂时不写
@@ -84,7 +84,7 @@ public class VerificationCodeService {
     public ResponseResult checkCode(String passengerPhone, String verificationCode) {
         //根据手机号，去redis读取验证码:1生成key2根据key获取value
         System.out.println("根据手机号，去redis读取验证码");
-        String key = RedisPrefixUtils.generateKeyByPhone(passengerPhone);
+        String key = RedisPrefixUtils.generateKeyByPhone(passengerPhone, IdentityConstant.PASSENGER_IDENTITY);
         String codeRedis = stringRedisTemplate.opsForValue().get(key);
         System.out.println("redis中的value:" + codeRedis);
 

@@ -5,9 +5,7 @@ import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.internalcommon.request.VerificationCodeDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * ClassName: VerificationCodeController
@@ -31,6 +29,18 @@ public class VerificationCodeController {
         String driverPhone = verificationCodeDTO.getDriverPhone();
         log.info("司机的号码："+driverPhone);
         return verificationCodeService.checkAndSendVerificationCode(driverPhone);
+    }
+
+    @PostMapping("/verification-code-check")
+    public ResponseResult checkVerificationCode(@RequestBody VerificationCodeDTO verificationCodeDTO){
+        //接受参数
+        String driverPhone = verificationCodeDTO.getDriverPhone();
+        String verificationCode = verificationCodeDTO.getVerificationCode();
+        System.out.println("接收到的手机号为" + driverPhone);
+        System.out.println("接收到的验证码为" + verificationCode);
+
+        //返回参数
+        return verificationCodeService.checkCode(driverPhone, verificationCode);
     }
 
 
