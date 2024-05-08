@@ -1,36 +1,34 @@
 package com.msb.servicemap.controller;
 
 import com.msb.internalcommon.dto.ResponseResult;
-import com.msb.servicemap.service.GaodeServiceService;
+import com.msb.internalcommon.response.GaodeTerminalResponse;
+import com.msb.servicemap.service.GaodeTrimianlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * ClassName: GaodeServiceController
+ * ClassName: GaodeTrimianlController
  * Package: com.msb.servicemap.controller
  * Description:
  *
  * @Author Emoaya
- * @Create 2024/5/8 15:49
+ * @Create 2024/5/8 16:34
  * @Version 1.0
  */
 
 @RestController
-@RequestMapping("/service")
-public class GaodeServiceController {
+@RequestMapping("/terminal")
+public class GaodeTrimianlController {
 
     @Autowired
-    private GaodeServiceService gaodeServiceService;
+    private GaodeTrimianlService gaodeTrimianlService;
 
-    //创建服务
     @PostMapping("/add")
     public ResponseResult add(String name){
-        return gaodeServiceService.add(name);
+        return gaodeTrimianlService.add(name);
     }
-
-
 
 
 }

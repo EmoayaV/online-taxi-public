@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class GaodeServiceMapService {
+public class GaodeServiceService {
 
     @Autowired
     private GaodeServiceClient gaodeServiceClient;
