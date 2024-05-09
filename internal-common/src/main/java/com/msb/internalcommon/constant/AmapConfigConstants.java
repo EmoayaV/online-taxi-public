@@ -19,6 +19,8 @@ public class AmapConfigConstants {
 
     public static final String TERMINAL_ADD_URL = "https://tsapi.amap.com/v1/track/terminal/add";
 
+    public static final String TRACE_ADD_URL = "https://tsapi.amap.com/v1/track/trace/add";
+
     public static final String STATUS = "status";
 
     public static final String ROUTE = "route";

@@ -40,6 +40,7 @@ public class Car {
     private Integer commercialType;
     private String fareType;
     private Integer state;
+    private String tid;
     private LocalDateTime gmtCreate;
     private LocalDateTime gmtModified;
 

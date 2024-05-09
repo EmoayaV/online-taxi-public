@@ -1,6 +1,7 @@
 package com.msb.servicemap.service;
 
 import com.msb.internalcommon.dto.ResponseResult;
+import com.msb.internalcommon.response.GaodeTerminalResponse;
 import com.msb.servicemap.remote.GaodeTerminalClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class GaodeTrimianlService {
     private GaodeTerminalClient gaodeTerminalClient;
 
 
-    public ResponseResult add(String name){
+    public ResponseResult<GaodeTerminalResponse> add(String name){
         return gaodeTerminalClient.add(name);
     }
 }
