@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 /**
  * ClassName: GaodeTrimianlService
  * Package: com.msb.servicemap.service
@@ -24,7 +26,12 @@ public class GaodeTrimianlService {
     private GaodeTerminalClient gaodeTerminalClient;
 
 
-    public ResponseResult<GaodeTerminalResponse> add(String name){
-        return gaodeTerminalClient.add(name);
+    public ResponseResult<GaodeTerminalResponse> add(String name, String desc){
+        return gaodeTerminalClient.add(name, desc);
+    }
+
+
+    public ResponseResult<List<GaodeTerminalResponse>> aroundsearch(String center, Integer radius){
+        return gaodeTerminalClient.aroundsearch(center,radius);
     }
 }

@@ -1,6 +1,5 @@
 package com.msb.servicedriveruser.controller;
 
-
 import com.msb.internalcommon.dto.Car;
 import com.msb.internalcommon.dto.DriverCarBindingRelationship;
 import com.msb.internalcommon.dto.ResponseResult;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 @RequestMapping("/driver-car-binding-relationship")

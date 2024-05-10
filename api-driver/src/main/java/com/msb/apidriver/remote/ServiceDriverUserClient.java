@@ -1,5 +1,6 @@
 package com.msb.apidriver.remote;
 
+import com.msb.internalcommon.dto.Car;
 import com.msb.internalcommon.dto.DriverUser;
 import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.internalcommon.response.DriverUserExistsResponse;
@@ -32,5 +33,11 @@ public interface ServiceDriverUserClient {
     @RequestMapping(method = RequestMethod.GET, value = "/check-driver/{driverPhone}")
     public ResponseResult<DriverUserExistsResponse> checkDriver(@PathVariable("driverPhone") String driverPhone);
 
+    //    @GetMapping("/car")
+    //    public ResponseResult<Car> getCarById(Long carId){
+    //        return carService.getCarById(carId);
+    //    }
+    @RequestMapping(method = RequestMethod.GET, value = "/car")
+    public ResponseResult<Car> getCarById(@RequestParam Long carId);
 
 }

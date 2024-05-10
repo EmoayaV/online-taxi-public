@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * ClassName: GaodeTrimianlController
  * Package: com.msb.servicemap.controller
@@ -26,8 +28,13 @@ public class GaodeTrimianlController {
     private GaodeTrimianlService gaodeTrimianlService;
 
     @PostMapping("/add")
-    public ResponseResult<GaodeTerminalResponse> add(String name){
-        return gaodeTrimianlService.add(name);
+    public ResponseResult<GaodeTerminalResponse> add(String name, String desc){
+        return gaodeTrimianlService.add(name, desc);
+    }
+
+    @PostMapping("/aroundsearch")
+    public ResponseResult<List<GaodeTerminalResponse>> aroundsearch(String center, Integer radius){
+        return gaodeTrimianlService.aroundsearch(center,radius);
     }
 
 

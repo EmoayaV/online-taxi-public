@@ -14,5 +14,5 @@ import lombok.Data;
 @Data
 public class GaodeTerminalResponse {
     public String tid;
-
+    public Long carId;
 }

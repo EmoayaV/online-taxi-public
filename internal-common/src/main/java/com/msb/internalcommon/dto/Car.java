@@ -41,6 +41,8 @@ public class Car {
     private String fareType;
     private Integer state;
     private String tid;
+    private String trid;
+    private String trname;
     private LocalDateTime gmtCreate;
     private LocalDateTime gmtModified;
 
