@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
  * @since 2024-05-12
  */
 @Repository
-public interface OrderMapper extends BaseMapper<OrderInfo> {
+public interface OrderInfoMapper extends BaseMapper<OrderInfo> {
 }

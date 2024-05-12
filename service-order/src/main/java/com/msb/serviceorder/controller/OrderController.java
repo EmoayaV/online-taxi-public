@@ -33,7 +33,7 @@ public class OrderController {
     @PostMapping("/add")
     public ResponseResult add(@RequestBody OrderRequest orderRequest){
         log.info("service-order："+orderRequest.getAddress());
-        return null;
+        return orderService.add(orderRequest);
     }
 
 }
