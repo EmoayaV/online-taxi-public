@@ -1,29 +1,26 @@
-package com.msb.apipaggenger;
+package com.msb.serviceorder;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
- * ClassName: ApiPassengerApplication
- * Package: com.msb.apipaggenger
+ * ClassName: ServiceOrderApplication
+ * Package: com.msb.serviceorder
  * Description:
  *
  * @Author Emoaya
- * @Create 2024/3/24 15:12
+ * @Create 2024/5/10 16:49
  * @Version 1.0
  */
+
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableDiscoveryClient
 @EnableFeignClients
-public class ApiPassengerApplication {
+public class ServiceOrderApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ApiPassengerApplication.class, args);
+        SpringApplication.run(ServiceOrderApplication.class, args);
     }
 }
-
-
-
