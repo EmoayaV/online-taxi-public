@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class OrderRequest {
+    public Long passengerId;
+    public String passengerPhone;
     public String address;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime departTime;
@@ -30,4 +32,5 @@ public class OrderRequest {
     public String destLatitude;
     public Integer encrypt;
     public String fareType;
+    public Integer fareVersion;
 }
