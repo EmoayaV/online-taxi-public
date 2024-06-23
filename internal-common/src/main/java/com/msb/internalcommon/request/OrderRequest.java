@@ -33,4 +33,5 @@ public class OrderRequest {
     public Integer encrypt;
     public String fareType;
     public Integer fareVersion;
+    public String deviceCode;
 }

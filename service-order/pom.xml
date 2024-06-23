@@ -51,6 +51,11 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
         </dependency>
+        <!--这个是为了解决remote接口中使用get方式请求却用RequestBody接收请求参数从而产生报错的问题-->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-httpclient</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

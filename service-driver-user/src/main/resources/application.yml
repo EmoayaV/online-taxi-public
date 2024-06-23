@@ -16,3 +16,6 @@ spring:
     host: 192.168.235.129
     port: 6379
     database: 0
+
+mybatis-plus:
+  config-locations: classpath:mappler/*.xml

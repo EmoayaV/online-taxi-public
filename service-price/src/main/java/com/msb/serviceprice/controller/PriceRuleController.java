@@ -4,10 +4,7 @@ import com.msb.internalcommon.dto.PriceRule;
 import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.serviceprice.service.PriceRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * ClassName: PriceRuleController
@@ -34,6 +31,11 @@ public class PriceRuleController {
     @PostMapping("/edit")
     public ResponseResult edit(@RequestBody PriceRule priceRule){
         return priceRuleService.edit(priceRule);
+    }
+
+    @GetMapping("/if-exists")
+    public ResponseResult<Boolean> ifExists(@RequestBody PriceRule priceRule){
+        return priceRuleService.ifExists(priceRule);
     }
 
 }

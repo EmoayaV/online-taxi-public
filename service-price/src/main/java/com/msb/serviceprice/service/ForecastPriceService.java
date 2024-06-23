@@ -1,5 +1,6 @@
 package com.msb.serviceprice.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.msb.internalcommon.constant.CommonStatusEnum;
 import com.msb.internalcommon.dto.PriceRule;
 import com.msb.internalcommon.dto.ResponseResult;
@@ -39,7 +40,7 @@ public class ForecastPriceService {
     @Autowired
     private PriceRuleMapper priceRuleMapper;
 
-    public ResponseResult forecastPrice(String depLongitude, String depLatitude, String destLongitude, String destLatitude) {
+    public ResponseResult forecastPrice(String depLongitude, String depLatitude, String destLongitude, String destLatitude, String cityCode, String vehicleType) {
         log.info("调用地图服务，查询距离和时长");
         ForecastPriceDTO forecastPriceDTO = new ForecastPriceDTO();
         forecastPriceDTO.setDepLongitude(depLongitude);
@@ -53,10 +54,12 @@ public class ForecastPriceService {
         log.info("时长：" + duration);
 
         log.info("读取计价规则");
-        Map<String, Object> queryMap = new HashMap<>();
-        queryMap.put("city_code", "110000");
-        queryMap.put("vehicle_type", "1");
-        List<PriceRule> priceRules = priceRuleMapper.selectByMap(queryMap);
+        QueryWrapper queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("city_code", cityCode);
+        queryWrapper.eq("vehicle_type", vehicleType);
+        queryWrapper.orderByDesc("fare_version");
+
+        List<PriceRule> priceRules = priceRuleMapper.selectList(queryWrapper);
         log.info("priceRules：" + priceRules.toString());
         if (priceRules.size() == 0) {
             return ResponseResult.fail(CommonStatusEnum.PRICE_RULE_EMPTY.getCode(), CommonStatusEnum.PRICE_RULE_EMPTY.getValue());
@@ -70,6 +73,8 @@ public class ForecastPriceService {
 
         ForecastPriceResponse forecastPriceResponse = new ForecastPriceResponse();
         forecastPriceResponse.setPrice(price);
+        forecastPriceResponse.setCityCode(cityCode);
+        forecastPriceResponse.setVehicleType(vehicleType);
         return ResponseResult.success(forecastPriceResponse);
     }
 

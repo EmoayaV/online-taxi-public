@@ -10,6 +10,7 @@ package com.msb.internalcommon.constant;
  * @Version 1.0
  */
 public class OrderConstants {
+    public static final int ORDER_INVALID = 0;
     public static final int ORDER_START = 1;
     public static final int RECEIVE_ORDER = 2;
     public static final int TO_PICK_IP_PASSENGER = 3;

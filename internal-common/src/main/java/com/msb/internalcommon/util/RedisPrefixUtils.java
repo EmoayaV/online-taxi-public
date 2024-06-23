@@ -14,6 +14,7 @@ public class RedisPrefixUtils {
     //验证码前缀
     private static String verificationCodePrefix = "verification-code-";
     private static String tokenPrefix = "token-";
+    public static String blackDeviceCodePrefix = "black-device-";
 
     /**
      * 根据手机号生成key
