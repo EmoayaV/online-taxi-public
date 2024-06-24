@@ -4,6 +4,7 @@ import com.msb.internalcommon.constant.DriverCarConstants;
 import com.msb.internalcommon.dto.DriverUser;
 import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.internalcommon.response.DriverUserExistsResponse;
+import com.msb.internalcommon.response.OrderDriverResponse;
 import com.msb.servicedriveruser.service.DriverUserService;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
@@ -61,6 +62,10 @@ public class UserController {
         return ResponseResult.success(driverUserExistsResponse);
     }
 
-
+    //根据车辆id查询订单需要的司机信息
+    @GetMapping("/get-available-driver/{carId}")
+    public ResponseResult<OrderDriverResponse> getAvailableDriver(@PathVariable("carId") Long carId){
+        return driverUserService.getAvailableDriver(carId);
+    }
 
 }

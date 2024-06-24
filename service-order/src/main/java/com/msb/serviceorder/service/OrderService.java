@@ -8,11 +8,15 @@ import com.msb.internalcommon.dto.OrderInfo;
 import com.msb.internalcommon.dto.PriceRule;
 import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.internalcommon.request.OrderRequest;
+import com.msb.internalcommon.response.GaodeTerminalResponse;
 import com.msb.internalcommon.util.RedisPrefixUtils;
 import com.msb.serviceorder.mapper.OrderInfoMapper;
 import com.msb.serviceorder.remote.ServiceDriverUserClient;
+import com.msb.serviceorder.remote.ServiceMapClient;
 import com.msb.serviceorder.remote.ServicePriceClient;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -20,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -48,13 +54,16 @@ public class OrderService {
     @Autowired
     private ServiceDriverUserClient serviceDriverUserClient;
 
+    @Autowired
+    private ServiceMapClient serviceMapClient;
+
 
     public ResponseResult add(@RequestBody OrderRequest orderRequest) {
 
         ResponseResult<Boolean> availableDriver = serviceDriverUserClient.isAvailableDriver(orderRequest.getAddress());
-        log.info("orderRequest.getAddress()："+orderRequest.getAddress());
-        log.info("测试城市是否有司机结果："+availableDriver);
-        if(!availableDriver.getData()){
+        log.info("orderRequest.getAddress()：" + orderRequest.getAddress());
+        log.info("测试城市是否有司机结果：" + availableDriver);
+        if (!availableDriver.getData()) {
             return ResponseResult.fail(CommonStatusEnum.CITY_DRIVER_EMPTY.getCode(), CommonStatusEnum.CITY_DRIVER_EMPTY.getValue());
         }
 
@@ -73,12 +82,12 @@ public class OrderService {
             } else {
                 stringRedisTemplate.opsForValue().increment(deviceCodeKey);//value加1
             }
-        }else{
-            stringRedisTemplate.opsForValue().setIfAbsent(deviceCodeKey,"1",1, TimeUnit.HOURS);
+        } else {
+            stringRedisTemplate.opsForValue().setIfAbsent(deviceCodeKey, "1", 1, TimeUnit.HOURS);
         }
 
         //判断下单的城市和计价规则是否正常
-        if(!isPriceRuleExists(orderRequest)){
+        if (!isPriceRuleExists(orderRequest)) {
             return ResponseResult.fail(CommonStatusEnum.CITY_SERVICE_NOT_SERVICE.getCode(), CommonStatusEnum.CITY_SERVICE_NOT_SERVICE.getValue());
         }
 
@@ -101,15 +110,19 @@ public class OrderService {
         orderInfo.setGmtModified(now);
 
         orderInfoMapper.insert(orderInfo);
+
+        //派单
+        dispatchRealTimeOrder(orderInfo);
+
         return ResponseResult.success();
     }
 
     //判断下单的城市和计价规则是否正常
-    public boolean isPriceRuleExists(OrderRequest orderRequest){
+    public boolean isPriceRuleExists(OrderRequest orderRequest) {
         String fareType = orderRequest.getFareType();
         int index = fareType.indexOf("$");
         String cityCode = fareType.substring(0, index);
-        String vehicleType = fareType.substring(index+1);
+        String vehicleType = fareType.substring(index + 1);
 
         PriceRule priceRule = new PriceRule();
         priceRule.setVehicleType(vehicleType);
@@ -147,6 +160,51 @@ public class OrderService {
         Long validOrderNumber = orderInfoMapper.selectCount(queryWrapper);
 
         return validOrderNumber;
+
+    }
+
+    //实时订单派单逻辑
+    public void dispatchRealTimeOrder(OrderInfo orderInfo) {
+
+        String depLatitude = orderInfo.getDepLatitude();
+        String depLongitude = orderInfo.getDepLongitude();
+        String center = depLatitude + "," + depLongitude;
+
+        List<Integer> radiusList = new ArrayList<>();
+        radiusList.add(2000);
+        radiusList.add(4000);
+        radiusList.add(5000);
+
+        ResponseResult<List<GaodeTerminalResponse>> aroundsearch = null;
+
+        for (int i = 0; i < radiusList.size(); i++) {
+            //获取半径
+            Integer radius = radiusList.get(i);
+            aroundsearch = serviceMapClient.aroundsearch(center, radius);
+
+            log.info("在半径为：" + radius + "的范围，寻找车辆。");
+
+            //获得终端
+            log.info("结果是：" + JSONArray.fromObject(aroundsearch.getData()).toString());
+
+            //解析终端
+            JSONArray result = JSONArray.fromObject(aroundsearch.getData());
+            for (int j = 0; j < result.size(); j++) {
+                JSONObject jsonObject = result.getJSONObject(j);
+                String carIdString = jsonObject.getString("carId");
+                Long carId = Long.parseLong(carIdString);
+
+            }
+
+
+            //根据解析的终端查询车辆
+
+            //找到符合的车辆，进行派单
+
+            //如果派单成果，退出循环
+
+
+        }
 
     }
 

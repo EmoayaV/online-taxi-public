@@ -98,7 +98,7 @@ public class GaodeTerminalClient {
             GaodeTerminalResponse gaodeTerminalResponse = new GaodeTerminalResponse();
 
             JSONObject jsonObject = results.getJSONObject(i);
-            Long carId = Long.valueOf(jsonObject.getString("desc"));
+            Long carId = Long.parseLong(jsonObject.getString("desc"));
             String tid = jsonObject.getString("tid");
 
             gaodeTerminalResponse.setCarId(carId);

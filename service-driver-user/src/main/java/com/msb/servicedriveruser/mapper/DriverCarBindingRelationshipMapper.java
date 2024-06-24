@@ -16,4 +16,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DriverCarBindingRelationshipMapper extends BaseMapper<DriverCarBindingRelationship> {
 
+    void selectOne();
 }
