@@ -32,6 +32,7 @@ public enum CommonStatusEnum {
     DRIVER_CAR_BIND_EXITS(1502,"司机车辆绑定关系已经存在，请勿重复绑定"),
     DRIVER_BIND_EXISTS(1503,"司机已经被绑定，请勿重复绑定"),
     CAR_BIND_EXISTS(1504,"车辆已经被绑定，请勿重复绑定"),
+    CITY_DRIVER_EMPTY(1505,"当前城市没有可用的司机"),
     ORDER_GOING_ON(1600,"有正在进行的订单"),
     DEVICE_IS_BLACK(1601,"该设备超过下单次数"),
     CITY_SERVICE_NOT_SERVICE(1602,"当前城市不提供叫车服务"),

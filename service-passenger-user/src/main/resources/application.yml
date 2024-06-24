@@ -8,7 +8,7 @@ spring:
   application:
     name: service-passenger-user
   redis:
-    host: 192.168.235.129
+    host: 192.168.111.128
     port: 6379
     database: 0
   datasource:

@@ -10,7 +10,9 @@ import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.internalcommon.request.OrderRequest;
 import com.msb.internalcommon.util.RedisPrefixUtils;
 import com.msb.serviceorder.mapper.OrderInfoMapper;
+import com.msb.serviceorder.remote.ServiceDriverUserClient;
 import com.msb.serviceorder.remote.ServicePriceClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -31,6 +33,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @Service
+@Slf4j
 public class OrderService {
 
     @Autowired
@@ -42,7 +45,19 @@ public class OrderService {
     @Autowired
     private ServicePriceClient servicePriceClient;
 
+    @Autowired
+    private ServiceDriverUserClient serviceDriverUserClient;
+
+
     public ResponseResult add(@RequestBody OrderRequest orderRequest) {
+
+        ResponseResult<Boolean> availableDriver = serviceDriverUserClient.isAvailableDriver(orderRequest.getAddress());
+        log.info("orderRequest.getAddress()："+orderRequest.getAddress());
+        log.info("测试城市是否有司机结果："+availableDriver);
+        if(!availableDriver.getData()){
+            return ResponseResult.fail(CommonStatusEnum.CITY_DRIVER_EMPTY.getCode(), CommonStatusEnum.CITY_DRIVER_EMPTY.getValue());
+        }
+
         //下单的设备是否是黑名单设备
         String deviceCode = orderRequest.getDeviceCode();
         //生成key
