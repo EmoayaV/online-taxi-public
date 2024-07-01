@@ -20,6 +20,8 @@ import com.msb.serviceorder.remote.ServicePriceClient;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -60,6 +62,9 @@ public class OrderService {
 
     @Autowired
     private ServiceMapClient serviceMapClient;
+
+    @Autowired
+    RedissonClient redissonClient;
 
 
     public ResponseResult add(@RequestBody OrderRequest orderRequest) {
@@ -228,8 +233,8 @@ public class OrderService {
                 String carIdString = jsonObject.getString("carId");
                 Long carId = Long.parseLong(carIdString);
 
-                long longitude = jsonObject.getLong("longitude");
-                long latitude = jsonObject.getLong("latitude");
+                String longitude = jsonObject.getString("longitude");
+                String latitude = jsonObject.getString("latitude");
 
 
                 //查询是否有对应的可派单司机
@@ -247,8 +252,14 @@ public class OrderService {
                     String licenseId = orderDriverResponse.getLicenseId();
 
 
+                    //加分布式锁
+                    String lockKey = (driverId + "").intern();
+                    RLock lock = redissonClient.getLock(lockKey);
+                    lock.lock();
+
                     //判断司机是否有进行中的订单，则不允许下单
                     if (isDriverOrderGoingOn(driverId) > 0) {
+                        lock.unlock();
                         continue;
                     }
 
@@ -257,22 +268,24 @@ public class OrderService {
                     QueryWrapper<Car> queryWrapper = new QueryWrapper<>();
                     queryWrapper.eq("id", carId);
                     //查询当前司机信息
-
-
                     orderInfo.setDriverId(driverId);
                     orderInfo.setDriverPhone(driverPhone);
                     orderInfo.setCarId(carId);
-                    orderInfo.setReceiveOrderCarLongitude(longitude + "");
-                    orderInfo.setReceiveOrderCarLatitude(latitude + "");
-
+                    orderInfo.setReceiveOrderCarLongitude(longitude);
+                    orderInfo.setReceiveOrderCarLatitude(latitude);
                     orderInfo.setReceiveOrderTime(LocalDateTime.now());
                     orderInfo.setLicenseId(licenseId);
                     orderInfo.setVehicleNo(vehicleNo);
                     orderInfo.setOrderStatus(OrderConstants.ORDER_START);
 
+                    lock.unlock();
 
                     //退出，不再进行司机的查找
                     break radius;
+
+
+
+
 
                 }
 

@@ -38,6 +38,4 @@ public interface ServiceOrderClient {
     @RequestMapping(method = RequestMethod.POST, value = "/order/add")
     public ResponseResult add(@RequestBody OrderRequest orderRequest);
 
-
-
 }
