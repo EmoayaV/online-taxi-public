@@ -7,6 +7,7 @@ import com.msb.internalcommon.response.GaodeTerminalResponse;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.bouncycastle.asn1.its.Longitude;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -101,8 +102,14 @@ public class GaodeTerminalClient {
             Long carId = Long.parseLong(jsonObject.getString("desc"));
             String tid = jsonObject.getString("tid");
 
+            JSONObject location = jsonObject.getJSONObject("location");
+            long longitude = location.getLong("longitude");
+            long latitude = location.getLong("latitude");
+
             gaodeTerminalResponse.setCarId(carId);
             gaodeTerminalResponse.setTid(tid);
+            gaodeTerminalResponse.setLongitude(longitude);
+            gaodeTerminalResponse.setLatitude(latitude);
 
             terminalResponseList.add(gaodeTerminalResponse);
 

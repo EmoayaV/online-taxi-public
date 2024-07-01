@@ -15,4 +15,7 @@ import lombok.Data;
 public class GaodeTerminalResponse {
     public String tid;
     public Long carId;
+    public Long longitude;
+    public Long latitude;
+
 }

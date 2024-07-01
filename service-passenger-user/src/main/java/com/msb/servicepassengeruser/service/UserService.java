@@ -45,7 +45,7 @@ public class UserService {
             PassengerUser passengerUser = new PassengerUser();
             passengerUser.setPassengerName("张三");
             passengerUser.setPassengerGender((byte) 0);
-            passengerUser.setPassengerPhone("1234567890");
+            passengerUser.setPassengerPhone("18997925277");
             passengerUser.setState((byte) 0);
             passengerUser.setGmtModified(LocalDateTime.now());
             passengerUser.setGmtCreate(LocalDateTime.now());

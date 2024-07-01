@@ -3,12 +3,15 @@ package com.msb.serviceorder.service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.msb.internalcommon.constant.CommonStatusEnum;
+import com.msb.internalcommon.constant.DriverCarConstants;
 import com.msb.internalcommon.constant.OrderConstants;
+import com.msb.internalcommon.dto.Car;
 import com.msb.internalcommon.dto.OrderInfo;
 import com.msb.internalcommon.dto.PriceRule;
 import com.msb.internalcommon.dto.ResponseResult;
 import com.msb.internalcommon.request.OrderRequest;
 import com.msb.internalcommon.response.GaodeTerminalResponse;
+import com.msb.internalcommon.response.OrderDriverResponse;
 import com.msb.internalcommon.util.RedisPrefixUtils;
 import com.msb.serviceorder.mapper.OrderInfoMapper;
 import com.msb.serviceorder.remote.ServiceDriverUserClient;
@@ -23,6 +26,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.management.QueryEval;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +96,7 @@ public class OrderService {
         }
 
 
-        //判断有正在进行的订单，则不允许下单
+        //判断乘客有正在进行的订单，则不允许下单
         if (isOrderGoingOn(orderRequest.getPassengerId()) > 0) {
             return ResponseResult.fail(CommonStatusEnum.ORDER_GOING_ON.getCode(), CommonStatusEnum.ORDER_GOING_ON.getValue());
         }
@@ -133,7 +137,7 @@ public class OrderService {
     }
 
 
-    //判断是否有业务中的订单
+    //判断乘客是否有业务中的订单
     public Long isOrderGoingOn(Long passengerId) {
 
         //判断有正在进行的订单，则不允许下单
@@ -163,6 +167,35 @@ public class OrderService {
 
     }
 
+    //判断司机是否有业务中的订单
+    public Long isDriverOrderGoingOn(Long driverId) {
+
+        //判断有正在进行的订单，则不允许下单
+        QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("driver_id", driverId);
+
+        // =======================================================
+        //and里面的参数是consume接口，所以要传一个consumer接口的实现类
+        //        @FunctionalInterface
+        //        public interface Consumer<T> {
+        //            void accept(T t);
+        // 如果代码块的语句只有一条，可以省略大括号和分号,如果有return,return也要省略
+        // 如果参数有且只有一个，那么小括号可以省略
+        // =======================================================
+        queryWrapper.and(Wrapper -> Wrapper.eq("order_status", OrderConstants.RECEIVE_ORDER)
+                .or().eq("order_status", OrderConstants.TO_PICK_IP_PASSENGER)
+                .or().eq("order_status", OrderConstants.DRIVER_ARRIVED_DEPARTURE)
+                .or().eq("order_status", OrderConstants.PICK_UP_PASSENGER)
+        );
+
+        Long validOrderNumber = orderInfoMapper.selectCount(queryWrapper);
+        log.info("司机ID：" + driverId + ",正在进行的订单数量是：" + validOrderNumber);
+
+        return validOrderNumber;
+
+    }
+
+
     //实时订单派单逻辑
     public void dispatchRealTimeOrder(OrderInfo orderInfo) {
 
@@ -177,6 +210,7 @@ public class OrderService {
 
         ResponseResult<List<GaodeTerminalResponse>> aroundsearch = null;
 
+        radius:
         for (int i = 0; i < radiusList.size(); i++) {
             //获取半径
             Integer radius = radiusList.get(i);
@@ -193,6 +227,55 @@ public class OrderService {
                 JSONObject jsonObject = result.getJSONObject(j);
                 String carIdString = jsonObject.getString("carId");
                 Long carId = Long.parseLong(carIdString);
+
+                long longitude = jsonObject.getLong("longitude");
+                long latitude = jsonObject.getLong("latitude");
+
+
+                //查询是否有对应的可派单司机
+                ResponseResult<OrderDriverResponse> availableDriver = serviceDriverUserClient.getAvailableDriver(carId);
+                if (availableDriver.getCode() == CommonStatusEnum.AVAILABLE_DRIVER_EMPTY.getCode()) {
+                    log.info("没有车辆ID:" + carId + "对应的司机.");
+                    continue;
+                } else {
+                    log.info("找到了正在出车的司机，他的车辆ID：" + carId);
+
+                    OrderDriverResponse orderDriverResponse = availableDriver.getData();
+                    Long driverId = orderDriverResponse.getDriverId();
+                    String driverPhone = orderDriverResponse.getDriverPhone();
+                    String vehicleNo = orderDriverResponse.getVehicleNo();
+                    String licenseId = orderDriverResponse.getLicenseId();
+
+
+                    //判断司机是否有进行中的订单，则不允许下单
+                    if (isDriverOrderGoingOn(driverId) > 0) {
+                        continue;
+                    }
+
+                    //订单直接匹配司机
+                    //查询当前车辆信息
+                    QueryWrapper<Car> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.eq("id", carId);
+                    //查询当前司机信息
+
+
+                    orderInfo.setDriverId(driverId);
+                    orderInfo.setDriverPhone(driverPhone);
+                    orderInfo.setCarId(carId);
+                    orderInfo.setReceiveOrderCarLongitude(longitude + "");
+                    orderInfo.setReceiveOrderCarLatitude(latitude + "");
+
+                    orderInfo.setReceiveOrderTime(LocalDateTime.now());
+                    orderInfo.setLicenseId(licenseId);
+                    orderInfo.setVehicleNo(vehicleNo);
+                    orderInfo.setOrderStatus(OrderConstants.ORDER_START);
+
+
+                    //退出，不再进行司机的查找
+                    break radius;
+
+                }
+
 
             }
 
